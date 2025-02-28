@@ -13,7 +13,8 @@ if (!function_exists('baseUrl')) {
      *
      * @return string The base URL of the application
      */
-    function baseUrl() {
+    function baseUrl()
+    {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
         $host = $_SERVER['HTTP_HOST'];
         $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
@@ -48,9 +49,27 @@ if (!function_exists('view')) {
      * 
      * @return string The rendered view content as a string
      */
-    function view(string $name, array $data) {
-        // @todo: Complete the view function so that we could render a view with data.
-        // e.g. view('checkout', $data);
+    // function view(string $name, array $data)
+    // {
+    //     // @todo: Complete the view function so that we could render a view with data.
+    //     // e.g. view('checkout', $data);
+
+        
+    // }
+
+    function view(string $name, array $data)
+    {
+        $viewFile = BASE_PATH . '/src/Views/' . $name . '.php';
+
+        if (!file_exists($viewFile)) {
+            throw new Exception("View file {$name}.php not found.");
+        }
+
+        // Extract data array to variables for use in the view
+        extract($data);
+
+        // Include the view file
+        include $viewFile;
     }
 }
 
@@ -70,7 +89,7 @@ if (!function_exists('redirect')) {
         if (filter_var($path, FILTER_VALIDATE_URL)) {
             $redirectUrl = $path;
         } else {
-            $redirectUrl = BASE_URL . '/' . ltrim($path, '/'); 
+            $redirectUrl = BASE_URL . '/' . ltrim($path, '/');
         }
 
         header('Location: ' . $redirectUrl);

@@ -1,11 +1,22 @@
 <?php
+
+require_once __DIR__ . '/../../config.php';
 $products = $data['products'];
 $address = $data['address'];
 $shippingCost = $data['shipping_cost'];
 
 // @todo: Calculate the subtotal from the products array
+
 $subtotal = 0;
+foreach ($data['products'] as $product) {
+    $subtotal += $product['price'] * $product['qty'];
+}
+
 $total = $subtotal + $shippingCost;
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -26,9 +37,12 @@ $total = $subtotal + $shippingCost;
                 </svg>
             </a>
         </div>
-        <form method="post" action="/checkout" class="space-y-8">
+        <!-- <form  action="<?= $base_url . 'src/Views/paypal.php' ?>"  method="POST" class="space-y-8"> -->
+        <form action="<?php echo $base_url . 'src/Views/paypal.php'; ?>" method="POST" class="space-y-8">
+
             <div class="grid grid-cols-[auto_350px] gap-8">
                 <div class="space-y-4">
+                    <input type="hidden" name="total" value="<?php echo $total; ?>">
                 <?php foreach ($products as $product) : ?>
                     <div class="bg-white shadow p-4 flex gap-4 rounded-md">
                         <div class="w-[96px] h-[96px] relative rounded-md overflow-hidden">
@@ -59,7 +73,7 @@ $total = $subtotal + $shippingCost;
                         <p>Total</p>
                         <p>$<?php echo $total; ?></p>
                     </div>
-                    <button class="inline-flex w-full items-center justify-center gap-2 text-sm font-medium whitespace-nowrap rounded-md transition-colors ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gray-800 text-white hover:bg-gray-700/90 h-9 px-4 py-2">Place Order</button>
+                    <button type="submit" class="inline-flex w-full items-center justify-center gap-2 text-sm font-medium whitespace-nowrap rounded-md transition-colors ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gray-800 text-white hover:bg-gray-700/90 h-9 px-4 py-2">Place Order</button>
                 </div>
             </div>
             <div class="grid grid-cols-[auto_calc(350px_+2rem)]">

@@ -56,6 +56,7 @@ Routes::get('/checkout', function () use ($data) {
     return view('checkout', $data);
 });
 
+
 Routes::post('/checkout', function ($request) {
     // @todo: Implement PayPal payment gateway integration here
     // 1. Initialize PayPal API client with credentials
