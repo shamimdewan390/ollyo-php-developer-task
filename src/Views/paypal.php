@@ -41,8 +41,8 @@ $payment->setIntent('sale')
 
 try {
     $payment->create($apiContext);
-
-    header("Location: index.php");
+    header("Location: " . $payment->getApprovalLink());
+    exit();
 } catch (\PayPal\Exception\PayPalConnectionException $ex) {
     echo "An error occurred: " . $ex->getData();
 } catch (Exception $ex) {
